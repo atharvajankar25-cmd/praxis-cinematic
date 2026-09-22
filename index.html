@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRAXIS — Cinematic 3D Title Sequence | 4K UHD 2.39:1</title>
+    <meta name="description" content="Cinematic photoreal 3D title sequence for PRAXIS. Marvel-Studios-style 8-second sequence in 4K UHD 24fps with dynamic lightning detonation, reverse singularity convergence, and brushed titanium emblem reveal.">
+    <meta name="theme-color" content="#06080c">
+    
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- 3D WebGL Canvas Viewport -->
+    <div id="webgl-container"></div>
+
+    <!-- Anamorphic 2.39:1 Cinema Letterbox Framing -->
+    <div class="cinema-wrapper" id="cinema-wrapper">
+        <div class="cinema-bar-top"></div>
+        <div class="cinema-bar-bottom"></div>
+    </div>
+
+    <!-- Additive Whiteout Flash Overlay -->
+    <div id="whiteout-overlay"></div>
+
+    <!-- Horizontal Anamorphic Flare Streak -->
+    <div class="anamorphic-flare-line"></div>
+
+    <!-- Micro Film Grain -->
+    <div class="film-grain"></div>
+
+    <!-- ============================================================
+         DIRECTOR HUD TELEMETRY & CONTROLS
+         ============================================================ -->
+    <div class="director-hud">
+        
+        <!-- Top Telemetry Header -->
+        <header class="hud-top-bar">
+            <div class="brand-badge">
+                <h1 class="brand-title">PRAXIS</h1>
+                <span class="brand-tag">4K UHD // 24 FPS // ANAMORPHIC 2.39:1</span>
+            </div>
+
+            <!-- Shot Selector Pills -->
+            <div class="shot-pill-container">
+                <button class="shot-pill active" data-shot="1" data-time="0.0" id="pill-shot-1">01 STORM & WARRIOR</button>
+                <button class="shot-pill" data-shot="2" data-time="2.5" id="pill-shot-2">02 DETONATION</button>
+                <button class="shot-pill" data-shot="3" data-time="4.5" id="pill-shot-3">03 SINGULARITY</button>
+                <button class="shot-pill" data-shot="4" data-time="6.5" id="pill-shot-4">04 PRAXIS REVEAL</button>
+            </div>
+
+            <!-- Live Telemetry & Audio Visualizer -->
+            <div class="hud-telemetry">
+                <div class="visualizer-box">
+                    <canvas id="audio-visualizer"></canvas>
+                    <span class="vis-label">AUDIO SPECTRUM</span>
+                </div>
+                <div class="timecode-block">
+                    <div class="timecode" id="timecode-display">00:00:00:00</div>
+                    <div class="frame-count" id="frame-display">FRAME 0000 / 0192 [24 FPS]</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Center Shot Description HUD Banner -->
+        <div class="shot-indicator-banner">
+            <div class="shot-indicator-tag" id="shot-indicator-tag">SHOT 1: THE STORM & WARRIOR</div>
+            <div class="shot-indicator-desc" id="shot-indicator-desc">
+                Extreme low-angle hero dolly-in behind armored warrior on shattered stone plateau at dusk
+            </div>
+        </div>
+
+        <!-- Bottom Director Console -->
+        <footer class="hud-bottom-bar">
+            <!-- Scrubber Track -->
+            <div class="scrubber-track-container">
+                <div class="shot-markers">
+                    <span>0.0s (Shot 1: Storm)</span>
+                    <span>2.5s (Shot 2: Strike)</span>
+                    <span>4.5s (Shot 3: Vortex)</span>
+                    <span>6.5s (Shot 4: Reveal)</span>
+                    <span>8.0s</span>
+                </div>
+                <input type="range" class="timeline-scrubber" id="timeline-scrubber" min="0" max="8.0" step="0.01" value="0">
+            </div>
+
+            <!-- Transport & Audio Controls -->
+            <div class="transport-controls-row">
+                <div class="transport-left">
+                    <button class="hud-btn primary" id="btn-play-pause">▶ PLAY</button>
+                    <button class="hud-btn" id="btn-replay">↺ REPLAY</button>
+                    <button class="hud-btn" id="btn-freecam">🕹️ FREE 3D ORBIT</button>
+                </div>
+
+                <div class="transport-right">
+                    <div class="volume-control">
+                        <button class="hud-btn" id="btn-mute">🔊</button>
+                        <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.05" value="0.85">
+                    </div>
+                    <button class="hud-btn" id="btn-toggle-drawer">📜 PROMPT & STORYBOARD</button>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ============================================================
+         INITIAL LAUNCH CURTAIN (USER INTERACTION UNLOCK)
+         ============================================================ -->
+    <div id="init-curtain">
+        <div class="curtain-content">
+            <h2 class="curtain-logo">PRAXIS</h2>
+            <div class="curtain-subtitle">CINEMATIC 3D TITLE SEQUENCE // UE5 / OCTANE RENDER GRADE</div>
+            <p class="curtain-meta">
+                8 SECONDS • 4K UHD 3840×2160 • 24 FPS • ANAMORPHIC 2.39:1<br>
+                REAL-TIME PROCEDURAL LIGHTNING, PARTICLES & SYNTHESIZED WEB AUDIO
+            </p>
+            <button class="btn-launch" id="btn-init-experience">
+                INITIALIZE CINEMATIC SEQUENCE
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         PROMPT & STORYBOARD REFERENCE DRAWER
+         ============================================================ -->
+    <aside id="prompt-drawer">
+        <div class="drawer-header">
+            <h3 class="drawer-title">THE SUPER PROMPT</h3>
+            <button class="drawer-close-btn" id="btn-close-drawer">✕</button>
+        </div>
+
+        <div class="drawer-body">
+            
+            <div class="drawer-card">
+                <h4>Cinematic Color Palette</h4>
+                <div class="palette-swatches">
+                    <div class="swatch" style="background: #00D4FF; color: #000;">#00D4FF<br>CYAN</div>
+                    <div class="swatch" style="background: #FFB800; color: #000;">#FFB800<br>GOLD</div>
+                    <div class="swatch" style="background: #94A3B8; color: #000;">#94A3B8<br>TITANIUM</div>
+                    <div class="swatch" style="background: #161C26; color: #FFF;">#161C26<br>SLATE</div>
+                </div>
+            </div>
+
+            <div class="drawer-card">
+                <h4>Master Prompt (8s Sequence)</h4>
+                <p>Cinematic photoreal 3D title sequence, 8 seconds, 4K UHD 3840×2160, 24fps, anamorphic 2.39:1, Unreal Engine 5 / Octane render quality, Marvel-Studios-style epic opening.</p>
+                <code>A lone armored warrior stands in silhouette on a shattered stone plateau at dusk, ornate battle-worn metal plating with Norse-inspired engravings, heavy cape snapping in a violent storm. Camera begins low-angle and slowly dollies in from behind, craning upward over the shoulder. Churning charcoal storm clouds above, pierced by volumetric god-rays...</code>
+            </div>
+
+            <div class="drawer-card">
+                <h4>Shot 1 — 0.0–2.5s</h4>
+                <p>Extreme low-angle hero shot, photoreal 3D, 4K. Silhouetted armored warrior on a shattered stone plateau at dusk, cape whipping in a storm, back to camera. Volumetric god-rays through charcoal clouds. Slow dolly-in from behind, craning up. Ash and embers in slow motion. Anamorphic, shallow DOF, film grain, teal-orange grade.</p>
+            </div>
+
+            <div class="drawer-card">
+                <h4>Shot 2 — 2.5–4.5s</h4>
+                <p>Wide orbital shot, photoreal 3D, 4K. Blue-white lightning strikes a stone plateau; shockwave ripples outward, rock and molten metal fragments explode toward camera in 240fps slow motion. Electric cyan rim lighting flares across engraved armor. Camera orbits right.</p>
+            </div>
+
+            <div class="drawer-card">
+                <h4>Shot 3 — 4.5–6.5s</h4>
+                <p>Rapid push-in through a field of glowing molten metal fragments, photoreal 3D, 4K. Fragments ignite and streak inward, converging on a single white-hot point at frame center. Screen brightness rising toward whiteout. Deep black background, cyan and gold energy trails.</p>
+            </div>
+
+            <div class="drawer-card">
+                <h4>Shot 4 — 6.5–8.0s</h4>
+                <p>Slow settle on a polished chrome-and-gold metallic emblem forming from cooling molten fragments against deep black. Electric-blue energy arcs across brushed titanium surface. Drifting embers. Anamorphic lens flare fading out.</p>
+            </div>
+
+            <div class="drawer-card">
+                <h4>Production Rules</h4>
+                <p><strong>1. Generate Shot 4 without text:</strong> Render as a blank metallic plate, then composite the PRAXIS wordmark over it in After Effects or CapCut.<br><br>
+                <strong>2. Keep faces out:</strong> Silhouettes, helmets, backs of heads preserve uncanny valley avoidance and legal clarity.<br><br>
+                <strong>3. Engine Notes:</strong> Kling 2.5 and Veo 3 handle debris physics and slow motion best. Runway Gen-4 for camera moves.</p>
+            </div>
+
+        </div>
+    </aside>
+
+    <!-- Core 3D Engine Scripts -->
+    <script src="js/lib/three.min.js"></script>
+    <script src="js/lib/OrbitControls.js"></script>
+
+    <!-- PRAXIS Cinematic Modular Pipeline -->
+    <script src="js/audio.js"></script>
+    <script src="js/lightning.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/scene.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
